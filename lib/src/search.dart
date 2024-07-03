@@ -31,7 +31,11 @@ class Search extends StatefulWidget {
     required this.micEnabled,
     required this.onSearchPressed,
     this.searchIcon = Icons.search,
-    this.hintTexts = const ['Pizza', 'Burger', 'Salad'],
+    this.hintTexts = const [
+      'Search "Pizza"',
+      'Search "Burger"',
+      'Search "Salad"'
+    ],
     this.animationDuration = const Duration(seconds: 2),
     this.hintStyle,
     this.searchIconColor = Colors.grey,
