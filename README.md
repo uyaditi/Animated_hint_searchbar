@@ -20,7 +20,7 @@ Add the dependency to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  animated_hint_searchbar: ^0.0.1
+  animated_hint_searchbar: ^1.0.0
 ```
 
 ## Import the package
@@ -89,21 +89,35 @@ class _HomeState extends State<Home> {
 }
 ```
 
-## Parameters
+## Customizable Parameters
 
-Here are the customizable parameters available in `Animated_hint_searchbar`:
+### Required Parameters
 
-- `hintTexts` (List<String>): List of hint texts to display in the search bar. Provides dynamic suggestions to the user.
-- `animationDuration` (Duration): Duration of the hint text animation. Controls how fast the hints change.
+- `textEditingController` (TextEditingController): Controller for managing the text being edited. Required to handle text input.
+- `micEnabled` (bool): Flag to enable or disable the microphone button. Required to indicate mic availability.
+- `onSearchPressed` (VoidCallback?): Callback function when the search icon is pressed. Required to define search action.
+
+### Optional Parameters
+
+- `searchIcon` (IconData): Icon for the search button. Defaults to `Icons.search`.
+- `hintTexts` (List<String>): List of hint texts to display in the search bar. Provides dynamic suggestions to the user. Defaults to `['Pizza', 'Burger', 'Salad']`.
+- `animationDuration` (Duration): Duration of the hint text animation. Controls how fast the hints change. Defaults to `Duration(seconds: 2)`.
 - `hintStyle` (TextStyle?): Style of the hint text. Customizes the appearance of the hint text.
-- `searchIconColor` (Color): Color of the search icon. Matches the search bar with your app's theme.
-- `micIconColor` (Color): Color of the microphone icon when inactive. Indicates the state of the mic.
-- `micIconActiveColor` (Color): Color of the microphone icon when active. Indicates when the mic is recording.
-- `containerColor` (Color): Background color of the search bar. Integrates the search bar with your app's design.
+- `searchIconColor` (Color): Color of the search icon. Matches the search bar with your app's theme. Defaults to `Colors.grey`.
+- `micIconColor` (Color): Color of the microphone icon when inactive. Indicates the state of the mic. Defaults to `Colors.grey`.
+- `micIconActiveColor` (Color): Color of the microphone icon when active. Indicates when the mic is recording. Defaults to `Colors.blue`.
+- `containerColor` (Color): Background color of the search bar. Integrates the search bar with your app's design. Defaults to `Colors.white`.
 - `boxShadow` (BoxShadow?): Shadow effect for the search bar container. Adds depth to the search bar UI.
-- `borderRadius` (BorderRadius?) : Radius for the search bar container. Adds more layers to the search bar UI.
-- `height` (double): Height of the search bar. Allows customization of the search bar size.
-- `width` (double): Width of the search bar. Allows customization of the search bar size.
+- `borderRadius` (BorderRadius?): Radius for the search bar container. Adds more layers to the search bar UI.
+- `height` (double): Height of the search bar. Allows customization of the search bar size. Defaults to `50`.
+- `width` (double?): Width of the search bar. Allows customization of the search bar size.
+- `cursorColor` (Color): Color of the text cursor. Defaults to `Colors.blue`.
+- `opacity` (double): Opacity of the search bar background. Defaults to `0.7`.
+- `fontFamily` (String): Font family for the text. Defaults to `Mukti`.
+- `textColor` (Color): Color of the search text. Defaults to `Colors.black`.
+- `verticalDivider_color` (Color): Color of the vertical divider between the text field and the microphone icon. Defaults to `Colors.black`.
+
+By using these parameters, you can customize the appearance and behavior of the `Animated_hint_searchbar` to match your app's design and functionality requirements.
 
 ## Authors
 

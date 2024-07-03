@@ -14,12 +14,23 @@ class Search extends StatefulWidget {
   final BoxShadow? boxShadow;
   final BorderRadius? borderRadius;
   final double height;
-  final double? width; // Make width nullable
+  final double? width;
+  final TextEditingController textEditingController;
+  final bool micEnabled;
+  final VoidCallback? onSearchPressed;
+  final IconData searchIcon;
   final Color cursorColor;
   final double opacity;
+  final String fontFamily;
+  final Color textColor;
+  final Color verticalDivider_color;
 
-  const Search({
+  Search({
     Key? key,
+    required this.textEditingController,
+    required this.micEnabled,
+    required this.onSearchPressed,
+    this.searchIcon = Icons.search,
     this.hintTexts = const ['Pizza', 'Burger', 'Salad'],
     this.animationDuration = const Duration(seconds: 2),
     this.hintStyle,
@@ -30,9 +41,12 @@ class Search extends StatefulWidget {
     this.boxShadow,
     this.borderRadius,
     this.height = 50,
-    this.cursorColor = Colors.black,
-    this.opacity = 1.0,
     this.width,
+    this.cursorColor = Colors.blue,
+    this.opacity = 0.7,
+    this.fontFamily = 'Mukti',
+    this.textColor = Colors.black,
+    this.verticalDivider_color = Colors.black,
   }) : super(key: key);
 
   @override
@@ -44,8 +58,6 @@ class SearchState extends State<Search> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animationTranslate;
   late Animation<double> _animationOpacity;
-  final TextEditingController _textEditingController = TextEditingController();
-  bool _isTextFieldEmpty = true;
   late stt.SpeechToText _speech;
   bool _isListening = false;
 
@@ -61,26 +73,26 @@ class SearchState extends State<Search> with SingleTickerProviderStateMixin {
     _animationTranslate = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.2, 0.7, curve: Curves.easeInOut),
+        curve: Interval(0.2, 0.7, curve: Curves.easeInOut),
       ),
     );
 
     _animationOpacity = Tween<double>(begin: 1, end: 0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeInOut),
+        curve: Interval(0.0, 0.5, curve: Curves.easeInOut),
       ),
     );
 
-    _textEditingController.addListener(() {
+    widget.textEditingController.addListener(() {
       setState(() {
-        _isTextFieldEmpty = _textEditingController.text.isEmpty;
+        // No need to update the state here, just listen to changes
       });
     });
 
     // Timer to change the hint text every 5 seconds
-    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (_isTextFieldEmpty) {
+    Timer.periodic(Duration(seconds: 5), (Timer timer) {
+      if (widget.textEditingController.text.isEmpty) {
         _controller.forward().whenComplete(() {
           setState(() {
             currentIndex = (currentIndex + 1) % widget.hintTexts.length;
@@ -94,7 +106,7 @@ class SearchState extends State<Search> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     _controller.dispose();
-    _textEditingController.dispose();
+    widget.textEditingController.dispose();
     _speech.cancel(); // Cancel speech recognition
     super.dispose();
   }
@@ -130,7 +142,7 @@ class SearchState extends State<Search> with SingleTickerProviderStateMixin {
           setState(() => _isListening = true);
           _speech.listen(
             onResult: (val) => setState(() {
-              _textEditingController.text = val.recognizedWords;
+              widget.textEditingController.text = val.recognizedWords;
             }),
           );
         }
@@ -143,109 +155,126 @@ class SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      height: widget.height,
-      width: widget.width ?? screenWidth,
-      decoration: BoxDecoration(
-        color: widget.containerColor,
-        borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
-        boxShadow: widget.boxShadow != null ? [widget.boxShadow!] : [],
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: IconButton(
-              icon: Icon(
-                Icons.search,
-                color: widget.searchIconColor,
-              ),
-              onPressed: () {},
-            ),
-          ),
-          Expanded(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                if (_isTextFieldEmpty)
-                  AnimatedBuilder(
-                    animation: _animationTranslate,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(0, -_animationTranslate.value * 70),
-                        child: Opacity(
-                          opacity: _animationOpacity.value * widget.opacity,
-                          child: TextField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              hintText: widget.hintTexts[currentIndex],
-                              hintStyle: widget.hintStyle,
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                if (_isTextFieldEmpty)
-                  AnimatedBuilder(
-                    animation: _animationTranslate,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(0, (1 - _animationTranslate.value) * 20),
-                        child: Opacity(
-                          opacity:
-                              (1 - _animationOpacity.value) * widget.opacity,
-                          child: TextField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              hintText: widget.hintTexts[
-                                  (currentIndex + 1) % widget.hintTexts.length],
-                              hintStyle: widget.hintStyle,
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                TextField(
-                  controller: _textEditingController,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                    hintText: '',
-                    border: InputBorder.none,
-                  ),
-                  cursorColor: widget.cursorColor,
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: widget.height,
+        width: widget.width ??
+            screenWidth, // Use user-provided width if available, else screen width
+        decoration: BoxDecoration(
+          color: widget.containerColor,
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(15),
+          boxShadow: widget.boxShadow != null ? [widget.boxShadow!] : [],
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: IconButton(
+                icon: Icon(
+                  widget.searchIcon,
+                  color: widget.searchIconColor,
                 ),
-              ],
-            ),
-          ),
-          const VerticalDivider(
-            color: Colors.grey,
-            width: 1,
-            thickness: 1,
-            indent: 8,
-            endIndent: 8,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: GestureDetector(
-              onTap: _startListening,
-              child: Icon(
-                _isListening ? Icons.mic : Icons.mic_none,
-                color: _isListening
-                    ? widget.micIconActiveColor
-                    : widget.micIconColor,
+                onPressed: widget.onSearchPressed ??
+                    () {}, // Use provided onPressed or do nothing
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  if (widget.textEditingController.text.isEmpty)
+                    AnimatedBuilder(
+                      animation: _animationTranslate,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, -_animationTranslate.value * 70),
+                          child: Opacity(
+                            opacity: _animationOpacity.value,
+                            child: TextField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                                hintText: widget.hintTexts[currentIndex],
+                                hintStyle: widget.hintStyle?.copyWith(
+                                  fontFamily: widget.fontFamily,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  if (widget.textEditingController.text.isEmpty)
+                    AnimatedBuilder(
+                      animation: _animationTranslate,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset:
+                              Offset(0, (1 - _animationTranslate.value) * 20),
+                          child: Opacity(
+                            opacity: 1 - _animationOpacity.value,
+                            child: TextField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10),
+                                hintText: widget.hintTexts[(currentIndex + 1) %
+                                    widget.hintTexts.length],
+                                hintStyle: widget.hintStyle?.copyWith(
+                                  fontFamily: widget.fontFamily,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  TextField(
+                    controller: widget.textEditingController,
+                    style: TextStyle(
+                      color: widget.textColor,
+                      fontFamily: widget.fontFamily,
+                    ),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      hintText: '',
+                      border: InputBorder.none,
+                    ),
+                    cursorColor: widget.cursorColor,
+                  ),
+                ],
+              ),
+            ),
+            if (widget.micEnabled)
+              VerticalDivider(
+                color: widget.verticalDivider_color,
+                width: 1,
+                thickness: 1,
+                indent: 8,
+                endIndent: 8,
+              ),
+            if (widget.micEnabled)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: GestureDetector(
+                  onTap: _startListening,
+                  child: Icon(
+                    _isListening ? Icons.mic : Icons.mic_none,
+                    color: _isListening
+                        ? widget.micIconActiveColor
+                        : widget.micIconColor,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

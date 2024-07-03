@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:animated_hint_searchbar/animated_hint_searchbar.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,40 +9,76 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Home(),
       debugShowCheckedModeBanner: false,
+      home: SearchExample(),
     );
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
+class SearchExample extends StatefulWidget {
   @override
-  State<Home> createState() => _HomeState();
+  _SearchExampleState createState() => _SearchExampleState();
 }
 
-class _HomeState extends State<Home> {
+class _SearchExampleState extends State<SearchExample> {
+  final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Search(
-            hintTexts: ['Sushi', 'Pasta', 'Salad'],
-            animationDuration: Duration(seconds: 1),
-            hintStyle: TextStyle(color: Colors.blue, fontSize: 18),
-            searchIconColor: Colors.blue,
-            micIconColor: Colors.black,
-            micIconActiveColor: Colors.blue,
-            containerColor: Colors.blueGrey[50],
-            boxShadow: BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 2),
+      backgroundColor: Color(0xfffffcf3),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 90, 10, 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Animated Searchbar',
+              style: TextStyle(
+                color: Color(0xff6f6d5f),
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                fontFamily: 'Roboto',
+              ),
             ),
-            height: 60,
-            width: 370),
+            SizedBox(
+              height: 40,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Search(
+                    textEditingController: _textEditingController,
+                    micEnabled: true,
+                    onSearchPressed: () {},
+                    cursorColor: Colors.white,
+                    hintStyle:
+                        TextStyle(color: Color(0xff6f6d5f), fontSize: 20),
+                    opacity: 0.5,
+                    fontFamily: 'Roboto',
+                    textColor: Color(0xff6f6d5f),
+                    containerColor: const Color(0xffebe8d6),
+                    verticalDivider_color: Color(0xff6f6d5f),
+                    micIconColor: Color(0xff6f6d5f),
+                    searchIconColor: Color(0xff6f6d5f),
+                    micIconActiveColor: Colors.red,
+                    height: 50,
+                    width: 390,
+                  ),
+                ],
+              ),
+            ),
+            //),
+          ],
+        ),
       ),
     );
   }
