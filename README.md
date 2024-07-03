@@ -21,7 +21,7 @@ Add the dependency to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  animated_hint_searchbar: ^1.0.0
+  animated_hint_searchbar: ^1.0.1
 ```
 
 ## Import the package
