@@ -10,9 +10,10 @@ A customizable search bar with speech recognition and dynamic hint text animatio
 
 ## Demo
 
-Check out the video demo to see Animated_hint_searchbar in action:
+Check out the video demo to see animated_hint_searchbar in action:
 
-[![Watch the video](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+https://github.com/XeHunter/Animated_hint_searchbar/assets/126171723/d07f8869-db25-4ab4-a2c0-92d818b5e6e6
+
 
 ## Installation
 
