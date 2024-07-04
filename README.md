@@ -12,8 +12,7 @@ A customizable search bar with speech recognition and dynamic hint text animatio
 
 Check out the video demo to see animated_hint_searchbar in action:
 
-https://github.com/XeHunter/Animated_hint_searchbar/assets/126171723/d07f8869-db25-4ab4-a2c0-92d818b5e6e6
-
+<img src="https://github.com/XeHunter/Animated_hint_searchbar/assets/126171723/060c90fa-7d90-4d83-9df6-59b319ef9a34" alt="Animated_hint_searchbar" width="300" height="500">
 
 ## Installation
 
@@ -154,5 +153,5 @@ By using these parameters, you can customize the appearance and behavior of the 
 
 ## Authors
 
-Developed by Aryan Surve (aryan2509surve@gmail.com) and Aditi Gaikwad (aditigaikwad003@gmail.com)
+Developed by [Aryan Surve](https://github.com/XeHunter) (aryan2509surve@gmail.com) and [Aditi Gaikwad](https://github.com/uyaditi) (aditigaikwad003@gmail.com)
 Drop a like if you enjoy using this package!
