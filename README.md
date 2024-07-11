@@ -1,6 +1,7 @@
 # animated_hint_searchbar
 
 A customizable search bar with speech recognition and dynamic hint text animations for Flutter.
+<p>Checkout on pub: https://pub.dev/packages/animated_hint_searchbar</p>
 
 ## Features
 
